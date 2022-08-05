@@ -13,12 +13,13 @@ router = Blueprint("users", __name__)
 
 @router.route("/register", methods=["POST"])
 def register():
-    
+    user_dictionary = request.json
+    print(user_dictionary)
     try:
-        user_dictionary = request.json
         user = user_schema.load(user_dictionary)
+        print(user)
         print("here")
-        user.credits = 0
+        user.credits = 2
         user.rating = 4
         user.save()
         return user_schema.jsonify(user)
@@ -27,7 +28,7 @@ def register():
         return jsonify(msg="Error: {}. ".format(e))
     
     except Exception as e:
-        return { "messages": "Something went wrong" }
+        return { "messages": "Something went wrong" }, HTTPStatus.BAD_REQUEST
 
 
 

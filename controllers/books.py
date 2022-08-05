@@ -166,6 +166,24 @@ def book_listings(book_id):
 
 
 
+@router.route("/listings/<int:listing_id>", methods=["DELETE"])
+@secure_route
+def del_book_listings(listing_id):
+        book_listing = BookListingModel.query.get(listing_id)
+
+        if not book_listing:
+            return {"message": "Book not found"}, HTTPStatus.NOT_FOUND
+
+        try:
+            book_listing.remove()
+
+        except ValidationError as e:
+            return {"errors:": e.messages, "messages": "Something went wrong"}
+
+        return book_schema.jsonify(book_listing), HTTPStatus.OK
+
+
+
 #comments
 
 
