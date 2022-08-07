@@ -16,7 +16,7 @@ class BookModel(db.Model, BaseModel):
     description = db.Column(db.Text, nullable=False)
     image = db.Column(db.Text, nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"))
     genre_id = db.Column(db.Integer, db.ForeignKey("genres.id"), nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey("authors.id", ondelete="CASCADE"), nullable=False)
 

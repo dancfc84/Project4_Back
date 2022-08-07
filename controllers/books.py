@@ -156,7 +156,7 @@ def book_create_listing(book_id):
 @router.route("/books/<int:book_id>/listing", methods=["GET"])
 @secure_route
 def book_listings(book_id):
-    text = f"SELECT books.name, book_conditions.condition, book_types.type, users.username, book_listings.id FROM book_sale JOIN book_listings ON book_sale.book_listings_id = book_listings.id JOIN books ON book_sale.book_id = books.id JOIN book_conditions ON book_listings.condition_id = book_conditions.id JOIN book_types ON book_listings.type_id = book_types.id JOIN users ON books.user_id = users.id WHERE book_id = {book_id}"
+    text = f"SELECT books.name, book_conditions.condition, book_types.type, users.username, book_listings.id, book_listings.user_id FROM book_sale JOIN book_listings ON book_sale.book_listings_id = book_listings.id JOIN books ON book_sale.book_id = books.id JOIN book_conditions ON book_listings.condition_id = book_conditions.id JOIN book_types ON book_listings.type_id = book_types.id JOIN users ON books.user_id = users.id WHERE book_id = {book_id}"
     records = db.engine.execute(text)
     results_list = [] 
     for r in records:
@@ -219,7 +219,7 @@ def delete_comment( comment_id ):
     except ValidationError as e:
         return {"errors:": e.messages, "messages": "Something went wrong"}
 
-    return "Comment deleted", HTTPStatus.OK
+    return comment_schema.jsonify(existing_comment), HTTPStatus.OK
 
 
 @router.route("/books/<int:book_id>/comments", methods=["POST"])

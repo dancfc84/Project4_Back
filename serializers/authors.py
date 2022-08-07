@@ -8,3 +8,4 @@ class AuthorSchema(ma.SQLAlchemyAutoSchema):
   class Meta:
     model = AuthorModel
     load_instance = True
+    exclude = ("created_at", "updated_at")

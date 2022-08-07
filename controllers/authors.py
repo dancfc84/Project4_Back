@@ -18,13 +18,12 @@ author_schema = AuthorSchema()
 router = Blueprint("authors", __name__)
 
 @router.route("/authors", methods=["GET"])
-
 def get_authors():
     authors = AuthorModel.query.all()
     return author_schema.jsonify(authors, many=True), HTTPStatus.OK
 
 
-@router.route("/authors", methods=["POST"])
+@router.route("/authors/create", methods=["POST"])
 @secure_route
 def create_author():
 

@@ -20,7 +20,10 @@ users_list = [
 ]
 
 authors_list = [
-    AuthorModel(first_name="Brett Easton", last_name="Ellis")
+    AuthorModel(first_name="--Choose an", last_name="option--"),
+    AuthorModel(first_name="Brett Easton", last_name="Ellis"),
+    AuthorModel(first_name="Ian", last_name="McEwan"),
+    AuthorModel(first_name="Irvine", last_name="Welsh")
 ]
 
 book_condition_list = [
@@ -37,6 +40,7 @@ type_list = [
 ]
 
 genre_list = [
+    GenreModel(genre="--Choose an option--"),
     GenreModel(genre="Thriller"),
     GenreModel(genre="Adventure"),
     GenreModel(genre="Romance"),
@@ -59,7 +63,8 @@ genre_list = [
 ]
 
 books_list  = [
-    BookModel( name="American Psycho", year_released=1991, rating=4.2, listing=listing_data ,description="Set in Manhattan during the Wall Street boom of the late 1980s, American Psycho follows the life of wealthy young investment banker Patrick Bateman. Bateman, in his mid-20s when the story begins, narrates his everyday activities, from his recreational life among the Wall Street elite of New York to his forays into murder by night. Through present tense stream-of-consciousness narrative, Bateman describes his daily life, ranging from a series of Friday nights spent at nightclubs with his colleagues—where they snort cocaine, critique fellow club-goers' clothing, trade fashion advice, and question one another on proper etiquette—to his loveless engagement to fellow yuppie Evelyn and his contentious relationship with his brother and senile mother.", image="https://welcometothewriterslife.com/wp-content/uploads/2018/07/American-Psycho.jpg", pages=399, user_id=1, genre_id=1, author_id=1 ),
+    BookModel( name="American Psycho", year_released=1991, rating=4.2, listing=listing_data ,description="Set in Manhattan during the Wall Street boom of the late 1980s, American Psycho follows the life of wealthy young investment banker Patrick Bateman. Bateman, in his mid-20s when the story begins, narrates his everyday activities, from his recreational life among the Wall Street elite of New York to his forays into murder by night. Through present tense stream-of-consciousness narrative, Bateman describes his daily life, ranging from a series of Friday nights spent at nightclubs with his colleagues—where they snort cocaine, critique fellow club-goers' clothing, trade fashion advice, and question one another on proper etiquette—to his loveless engagement to fellow yuppie Evelyn and his contentious relationship with his brother and senile mother.", image="https://welcometothewriterslife.com/wp-content/uploads/2018/07/American-Psycho.jpg", pages=399, user_id=1, genre_id=2, author_id=2 ),
+    BookModel( name="Trainspotting", year_released=1993, rating=4.2, listing=listing_data ,description="Trainspotting is the first novel by Scottish writer Irvine Welsh, first published in 1993. It takes the form of a collection of short stories, written in either Scots, Scottish English or British English, revolving around various residents of Leith, Edinburgh who either use heroin, are friends of the core group of heroin users, or engage in destructive activities that are effectively addictions", image="https://newgstudio.com/wp-content/uploads/2016/05/trainspotting2.png", pages=344, user_id=1, genre_id=2, author_id=4 ),
 ]
 
 book_listing_list = [

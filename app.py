@@ -35,9 +35,10 @@ bcrypt = Bcrypt(app)
 from controllers import books
 from controllers import users
 from controllers import authors
+from controllers import genres
 
 #Put routes here
 app.register_blueprint(books.router, url_prefix="/api")
 app.register_blueprint(users.router, url_prefix="/api")
 app.register_blueprint(authors.router, url_prefix="/api")
-
+app.register_blueprint(genres.router, url_prefix="/api")
