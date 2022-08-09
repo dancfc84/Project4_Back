@@ -1,8 +1,8 @@
 
-from flask import Blueprint, request, g
+from flask import Blueprint, request, g, jsonify
 from http import HTTPStatus
 
-
+from app import db
 from models.authors import AuthorModel
 
 from serializers.authors import AuthorSchema
@@ -19,8 +19,25 @@ router = Blueprint("authors", __name__)
 
 @router.route("/authors", methods=["GET"])
 def get_authors():
-    authors = AuthorModel.query.all()
-    return author_schema.jsonify(authors, many=True), HTTPStatus.OK
+
+    text = f"SELECT * FROM authors ORDER BY first_name"
+    try:
+        records = db.engine.execute(text)
+
+        if not records:
+            return { "message": "No records found"}, HTTPStatus.OK
+
+        results_list = [] 
+        for r in records:
+            r_dict = dict(r.items())
+            print(r_dict)
+            results_list.append(r_dict)
+
+        return jsonify(results_list), HTTPStatus.OK
+
+    except Exception as e:
+
+        return {"messages" : "Something went wrong"}
 
 
 @router.route("/authors/create", methods=["POST"])

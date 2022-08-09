@@ -17,6 +17,7 @@ def register():
 
     try:    
         user_dictionary = request.json
+        print(user_dictionary)
         user = user_schema.load(user_dictionary)
         user.credits = 2
         user.rating = 4

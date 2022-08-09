@@ -29,8 +29,25 @@ router = Blueprint("books", __name__)
 @router.route("/books", methods=["GET"])
 
 def get_books():
-    books = BookModel.query.all()
-    return book_schema.jsonify(books, many=True), HTTPStatus.OK
+
+    text = f"SELECT * FROM books ORDER BY name"
+    try:
+        records = db.engine.execute(text)
+
+        if not records:
+            return { "message": "No records found"}, HTTPStatus.OK
+
+        results_list = [] 
+        for r in records:
+            r_dict = dict(r.items())
+            print(r_dict)
+            results_list.append(r_dict)
+
+        return jsonify(results_list), HTTPStatus.OK
+
+    except Exception as e:
+
+        return {"messages" : "Something went wrong"}
 
 
 @router.route("/books", methods=["POST"])
@@ -57,12 +74,24 @@ def create_book():
 @router.route("/books/<int:book_id>", methods=["GET"])
 def get_single_book(book_id):
 
-    book = BookModel.query.get(book_id)
+    text = f"SELECT * FROM books JOIN authors ON books.author_id = authors.id WHERE books.id = {book_id}"
+    try:
+        records = db.engine.execute(text)
 
-    if not book:
-      return { "message": "Book not found"}, HTTPStatus.OK
+        if not records:
+            return { "message": "No records found"}, HTTPStatus.OK
 
-    return book_schema.jsonify(book)
+        results_list = [] 
+        for r in records:
+            r_dict = dict(r.items())
+            print(r_dict)
+            results_list.append(r_dict)
+
+        return jsonify(results_list), HTTPStatus.OK
+
+    except Exception as e:
+
+        return {"messages" : "Something went wrong"}
 
 
 @router.route("/books/<int:book_id>", methods=["DELETE"])
@@ -154,16 +183,23 @@ def book_create_listing(book_id):
 
 
 @router.route("/books/<int:book_id>/listing", methods=["GET"])
-@secure_route
 def book_listings(book_id):
-    text = f"SELECT books.name, book_conditions.condition, book_types.type, users.username, book_listings.id, book_listings.user_id FROM book_sale JOIN book_listings ON book_sale.book_listings_id = book_listings.id JOIN books ON book_sale.book_id = books.id JOIN book_conditions ON book_listings.condition_id = book_conditions.id JOIN book_types ON book_listings.type_id = book_types.id JOIN users ON books.user_id = users.id WHERE book_id = {book_id}"
-    records = db.engine.execute(text)
-    results_list = [] 
-    for r in records:
-        r_dict = dict(r.items())
-        results_list.append(r_dict)
-    return jsonify(results_list), HTTPStatus.OK
+    text = f"SELECT books.name, book_conditions.condition, book_types.type, users.username, book_listings.id, book_listings.user_id FROM book_sale JOIN book_listings ON book_sale.book_listings_id = book_listings.id JOIN books ON book_sale.book_id = books.id JOIN book_conditions ON book_listings.condition_id = book_conditions.id JOIN book_types ON book_listings.type_id = book_types.id JOIN users ON book_listings.user_id = users.id WHERE book_id = {book_id}"
+    try:
+        records = db.engine.execute(text)
+            
+        if not records:
+            return { "message": "No records found"}, HTTPStatus.OK
+    
+        results_list = [] 
+        for r in records:
+            r_dict = dict(r.items())
+            results_list.append(r_dict)
+        return jsonify(results_list), HTTPStatus.OK
 
+    except Exception as e:
+
+        return {"messages" : "Something went wrong"}
 
 
 @router.route("/listings/<int:listing_id>", methods=["DELETE"])
@@ -191,14 +227,22 @@ def del_book_listings(listing_id):
 @secure_route
 def book_comments( book_id ):
 
-    comments = CommentModel.query.filter_by(book_id = book_id)
+    text = f"SELECT comments.book_id, comments.content, comments.created_at, comments.id, users.username, comments.user_id FROM comments JOIN users ON comments.user_id = users.id WHERE book_id = {book_id}"
+    try:
+        records = db.engine.execute(text)
 
-    print(comments)
+        if not records:
+            return { "message": "No records found"}, HTTPStatus.OK
 
-    if not comments:
-      return {"message": "no comments found"}, HTTPStatus.NOT_FOUND
+        results_list = [] 
+        for r in records:
+            r_dict = dict(r.items())
+            results_list.append(r_dict)
+        return jsonify(results_list), HTTPStatus.OK
 
-    return comment_schema.jsonify(comments, many=True), HTTPStatus.OK
+    except Exception as e:
+
+        return {"messages" : "Something went wrong"}
 
 
 @router.route("/comments/<int:comment_id>", methods=["DELETE"])
