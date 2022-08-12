@@ -27,7 +27,6 @@ comment_schema = CommentSchema()
 router = Blueprint("books", __name__)
 
 @router.route("/books", methods=["GET"])
-
 def get_books():
 
     text = f"SELECT * FROM books ORDER BY name"
@@ -55,6 +54,8 @@ def get_books():
 def create_book():
 
     book_dictionary = request.json
+    book_dictionary['author_id'] = int(book_dictionary['author_id'])
+    book_dictionary['genre_id'] = int(book_dictionary['genre_id'])
 
     try:
         book = book_schema.load(book_dictionary)
@@ -64,8 +65,6 @@ def create_book():
 
     book.user_id = g.current_user.id
     book.rating = 3
-    book.genre_id = 1
-    book.author_id = 1
     book.save()
 
     return book_schema.jsonify(book), HTTPStatus.CREATED
