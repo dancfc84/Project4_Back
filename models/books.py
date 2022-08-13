@@ -4,6 +4,7 @@ from models.users import UserModel
 from models.authors import AuthorModel
 from models.genres import GenreModel
 from models.book_sale import book_sale
+from models.book_wishlist import book_wishlist
 
 class BookModel(db.Model, BaseModel):
     
@@ -22,6 +23,7 @@ class BookModel(db.Model, BaseModel):
 
     #Add relationships
     listing = db.relationship('BookListingModel', backref='book_listings', secondary=book_sale) #This allows us to make a join table
+    wishlist = db.relationship('UserModel', backref='book_wishlists', secondary=book_wishlist) #This allows us to make a join table
     user = db.relationship("UserModel", backref="book_users")
     genre = db.relationship("GenreModel", backref="book_genre")
     author = db.relationship("AuthorModel", backref="book_author")

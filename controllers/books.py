@@ -7,17 +7,19 @@ from app import db
 from models.books import BookModel
 from models.book_listing import BookListingModel
 from models.comments import CommentModel
+from models.users import UserModel
 from models.book_sale import book_sale
 
 from serializers.books import BookSchema
 from serializers.book_listing import BookListingSchema
 from serializers.comments import CommentSchema
+from serializers.users import UserSchema
 
 from marshmallow.exceptions import ValidationError
 
 from middleware.secure_route import secure_route
 
-
+user_schema = UserSchema()
 book_schema = BookSchema()
 book_listing_schema = BookListingSchema()
 comment_schema = CommentSchema()
@@ -304,3 +306,87 @@ def update_comment(book_id, comment_id):
 
     return comment_schema.jsonify(existing_comment), HTTPStatus.OK
 
+
+#book_likes
+
+@router.route("/books/wishlist/<int:book_id>/<int:user_id>", methods=["POST"])
+def book_create_wishlist(book_id, user_id):
+
+    book = BookModel.query.get(book_id)
+    user = UserModel.query.get(user_id)
+
+    if not book or not user:
+        return {'message': "Item or User not found"}
+
+    try:
+        book.wishlist.append(user)
+        book.save()
+
+    except ValidationError as e:
+            return { "errors": e.messages, "message": "Something went wrong" }
+            
+
+    return book_listing_schema.jsonify(book), HTTPStatus.CREATED
+
+
+@router.route("/books/wishlist/<int:user_id>", methods=["GET"])
+@secure_route
+def book_get_user_wishlist(user_id):
+
+    text = f"SELECT books.id, books.name, books.image FROM book_wishlist JOIN books ON book_wishlist.book_id = books.id WHERE book_wishlist.user_id = {user_id}"
+    try:
+        records = db.engine.execute(text)
+
+        if not records:
+            return { "message": "No records found"}, HTTPStatus.OK
+
+        results_list = [] 
+        for r in records:
+            r_dict = dict(r.items())
+            results_list.append(r_dict)
+        return jsonify(results_list), HTTPStatus.OK
+
+    except Exception as e:
+
+        return {"messages" : "Something went wrong"}
+
+
+
+@router.route("/books/liked/<int:user_id>/<int:book_id>", methods=["GET"])
+@secure_route
+def user_liked(user_id, book_id):
+
+    text = f"SELECT * FROM book_wishlist WHERE user_id = {user_id} AND book_id = {book_id}"
+    try:
+        records = db.engine.execute(text)
+
+        if not records:
+            return { "message": "No records found"}, HTTPStatus.OK
+
+        results_list = [] 
+        for r in records:
+            r_dict = dict(r.items())
+            results_list.append(r_dict)
+        return jsonify(results_list), HTTPStatus.OK
+
+    except Exception as e:
+
+        return {"messages" : "Something went wrong"}
+
+
+@router.route("/books/liked/<int:user_id>/<int:book_id>", methods=["DELETE"])
+@secure_route
+def delete_user_liked(user_id, book_id):
+
+    text = f"DELETE FROM book_wishlist WHERE user_id = {user_id} AND book_id = {book_id}"
+    try:
+        records = db.engine.execute(text)
+
+        if not records:
+            return { "message": "No records found"}, HTTPStatus.OK
+
+        return {"messages" : "Removed"}
+
+    except Exception as e:
+
+        return {"messages" : "Something went wrong"}
