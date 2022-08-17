@@ -37,3 +37,4 @@ def get_genres():
 
         return {"messages" : "Something went wrong"}
 
+

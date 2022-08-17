@@ -225,7 +225,6 @@ def del_book_listings(listing_id):
 
 
 @router.route("/books/<int:book_id>/comments/", methods=["GET"])
-@secure_route
 def book_comments( book_id ):
 
     text = f"SELECT comments.book_id, comments.content, comments.created_at, comments.id, users.username, comments.user_id FROM comments JOIN users ON comments.user_id = users.id WHERE book_id = {book_id}"
