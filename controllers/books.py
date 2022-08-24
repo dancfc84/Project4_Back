@@ -28,6 +28,8 @@ comment_schema = CommentSchema()
 #Creates possible route
 router = Blueprint("books", __name__)
 
+
+
 @router.route("/books", methods=["GET"])
 def get_books():
 
