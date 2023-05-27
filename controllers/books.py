@@ -29,7 +29,6 @@ comment_schema = CommentSchema()
 router = Blueprint("books", __name__)
 
 
-
 @router.route("/books", methods=["GET"])
 def get_books():
 
@@ -297,6 +296,7 @@ def update_comment(book_id, comment_id):
 
     if not g.current_user.id == existing_comment.user_id:
       return {"message": "Not your comment, hands off!"}, HTTPStatus.UNAUTHORIZED
+      
     try:
         existing_comment.content = comment_dictionary['content']
         existing_comment.save()
